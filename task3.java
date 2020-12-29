@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class task3{
     public static int solutions(int a, int b, int c){
         int d = b*b-4*a*c; //ищет дискриминант уравнения
@@ -60,6 +62,91 @@ public class task3{
         return countDistinct(a)==countDistinct(b);
     }
     
+    public static boolean isKaprekar(int a){
+        String out = String.valueOf((int)Math.pow(a, 2)); // получить строку
+        // от числа а, возведенной в квадрат
+        int len = out.length(); // размер строки
+        if (len==1) return false; //ecли размер строки равен 1, то квадрат числа больше а
+        len = len / 2; // если число нечетное, то остаток отбрасывается
+        String left = out.substring(0, len); // правая часть числа
+        String right = out.substring(len); // левая часть числа
+        return ( Integer.parseInt(left)+Integer.parseInt(right) ) == a;//возвращает 
+        //true, если число является числом Капрекара 
+    }
+    
+    public static String longestZero(String bin){
+        String out = "";
+        try{
+            Integer.parseInt(bin, 2); //проверяет, является ли число двоичным, если нет, 
+            // то вызывается ошибка
+            int len = bin.length(); // размер строки
+            int zeros = 0; // число последовательных нулей
+            int max = 0; // максимальное число последовательных нулей
+            boolean is_counting = false; // флаг, указывающий на то, ведет ли отсчет нулей
+            char temp = '1'; // временная переменная
+            int i = 0; // переменная для цикла
+            while (i<len){
+                temp = bin.charAt(i); // присвоить temp символ из строки
+                i+=1; 
+                if (is_counting & (temp == '1')){
+                    is_counting = false; // если введется счет нулей
+                    // и символ равен 1, то приостановить счет нулей
+                    if (zeros > max){
+                        max = zeros;
+                    }
+                }
+                else if (is_counting & (temp == '0')){
+                    zeros +=1;
+                }
+                else if ((!is_counting) & (temp == '0')){
+                    zeros = 1;
+                    is_counting = true;
+                }
+            }
+            if (zeros > max){
+                max = zeros;
+            }
+            for (i=0; i<max; i++){
+                out+='0';
+            }
+            return out;
+        }
+        catch(Exception e){
+            return out;
+        }
+    } 
+    
+    //проверяет, является ли число простым 
+    public static boolean isPrime(int a){
+        int j = (int)primes.get(primes.size()-1); // берется последнее число из списка primes (список простых чисел)
+        l1: while (a>j){
+            // выполняется до тех пор, пока последнее число из списка primes (список простых чисел) меньше а
+            j+=2;  
+            for (int i = 0; i < primes.size(); i++){
+                int f = (int)(primes.get(i));
+                if ((j%f)==0) continue l1; 
+            }
+            primes.add(j); // если число не делится без остатка ни на одно из чисел из списка primes,
+            // то оно добавляется в конец списка
+        }
+        if (a==j) return true;
+        if (a<j) return primes.contains(a);
+        return true;
+    }
+    static public List primes = new ArrayList<Integer> (Arrays.asList(2, 3, 5));
+    
+    //Если задано целое число, то возвращается следующее
+    //простое число. Если число простое, возвращается само число. 
+    static public int nextPrime(int a){
+        while (!isPrime(a)){
+         //    System.out.println(isPrime(a));
+             a++; // увеличивать число до тех пор, пока не станет простым
+        }
+        return a;
+    }
+    
     public static void main(String [] argv){
+        System.out.println(nextPrime(4));
     }
 }
+
